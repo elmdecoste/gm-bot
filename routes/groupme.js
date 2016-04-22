@@ -20,11 +20,9 @@ router.post('/', function(req, res) {
             var command = body_array[1].toLowerCase();
 
             if(command === 'say'){
-                var string = stringAfterCommand(body_array);
+                var message = stringAfterCommand(body_array);
 
-                request.post({url:'https://api.groupme.com/v3/bots/post', form: {bot_id:botID, text:string}}, function(err,httpResponse,body){
-                    console.log("SENT GM MESSAGE: " + string);
-                });
+                sendMessage(message)
             }else if(command === 'compliment'){
                 var name = stringAfterCommand(body_array);
 
@@ -32,9 +30,13 @@ router.post('/', function(req, res) {
 
                 var message = name + compliments[getRandomIndex(0, compliments.length)];
 
-                request.post({url:'https://api.groupme.com/v3/bots/post', form: {bot_id:botID, text:message}}, function(err,httpResponse,body){
-                    console.log("SENT GM MESSAGE: " + message);
-                });
+                sendMessage(message);
+            }else if(command === 'joke'){
+                var jokes = ['Knock Knock, who\'s there. It\'s me, Alejandro'];
+
+                var message = jokes[getRandomIndex(0, jokes.length)];
+
+                sendMessage(message);
             }
 
         }else{
@@ -61,6 +63,12 @@ function stringAfterCommand(array){
 
 function getRandomIndex(low, high) {
     return Math.floor(Math.random() * (high - low) + low);
+}
+
+function sendMessage(message){
+    request.post({url:'https://api.groupme.com/v3/bots/post', form: {bot_id:botID, text:message}}, function(err,httpResponse,body){
+        console.log("SENT GM MESSAGE: " + message);
+    });
 }
 
 module.exports = router;
