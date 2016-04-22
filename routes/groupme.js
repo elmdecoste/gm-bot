@@ -15,9 +15,28 @@ router.post('/', function(req, res) {
 
     if(firstWord === 'alejandro'){
         console.log('is alejandro message');
-        request.post({url:'https://api.groupme.com/v3/bots/post', form: {bot_id:botID, text:"You called?"}}, function(err,httpResponse,body){
-            console.log("SENT GM MESSAGE");
-        });
+
+        if(body_array.length > 1){
+
+            var command = body_array[1].toLowerCase();
+
+            if(command === 'say'){
+                var string = "";
+                for(var i = 2; i < body_array.length; i++){
+                    string += body_array[i] + " ";
+                }
+
+                request.post({url:'https://api.groupme.com/v3/bots/post', form: {bot_id:botID, text:string}}, function(err,httpResponse,body){
+                    console.log("SENT GM MESSAGE: " + string);
+                });
+            }
+
+        }else{
+            request.post({url:'https://api.groupme.com/v3/bots/post', form: {bot_id:botID, text:"You called?"}}, function(err,httpResponse,body){
+                console.log("SENT GM MESSAGE: you called?");
+            });
+        }
+
         res.send('{"status":"200"}');
     }else{
         res.send('{"status":"201"}');
