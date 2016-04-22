@@ -9,15 +9,20 @@ router.post('/', function(req, res) {
 
     console.log(body);
 
-    if(body['text'].toLowerCase().indexOf('alejandro') < 2){
+    var body_array = body['text'].split(" ");
 
+    var firstWord = body_array[0].toLowerCase();
+
+    if(firstWord === 'alejandro'){
+        console.log('is alejandro message');
         request.post({url:'https://api.groupme.com/v3/bots/post', form: {bot_id:botID, text:"You called?"}}, function(err,httpResponse,body){
             console.log(httpResponse);
-        })
-        res.send('{"containsName":"true"}');
+        });
+        res.send('{"status":"200"}');
     }else{
-        res.send('{"containsName":"false"}');
+        res.send('{"status":"201"}');
     }
+
 });
 
 module.exports = router;
