@@ -28,12 +28,12 @@ router.post('/', function(req, res) {
             }else if(command === 'compliment'){
                 var name = stringAfterCommand(body_array);
 
-                var compliments = [' is beautiful', ' is amazing'];
+                var compliments = ['is beautiful', 'is amazing', 'is spectacular'];
 
                 var message = name + compliments[getRandomIndex(0, compliments.length)];
 
                 request.post({url:'https://api.groupme.com/v3/bots/post', form: {bot_id:botID, text:message}}, function(err,httpResponse,body){
-                    console.log("SENT GM MESSAGE: " + string);
+                    console.log("SENT GM MESSAGE: " + message);
                 });
             }
 
@@ -59,8 +59,8 @@ function stringAfterCommand(array){
     return string;
 }
 
-function getRandomIndex(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+function getRandomIndex(low, high) {
+    return Math.floor(Math.random() * (high - low) + low);
 }
 
 module.exports = router;
