@@ -4,8 +4,10 @@ var request = require('request');
 
 var botID= "3e535eaec161c3cf9d48d31fc3";
 
-router.post('/', function(req, res) {
+router.post('/:id', function(req, res) {
     var body = req.body;
+
+    var bot_id = req.params.id;
 
     var body_array = body['text'].split(" ");
 
@@ -22,7 +24,7 @@ router.post('/', function(req, res) {
             switch(command){
                 case 'say':
                     var sayMessage = stringAfterCommand(body_array);
-                    sendMessage(sayMessage);
+                    sendMessage(sayMessage, bot_id);
                     break;
                 case 'compliment':
                     var name = stringAfterCommand(body_array);
@@ -35,7 +37,7 @@ router.post('/', function(req, res) {
 
                     var complimentMessage = name + compliments[getRandomIndex(0, compliments.length)];
 
-                    sendMessage(complimentMessage);
+                    sendMessage(complimentMessage, bot_id);
 
                     break;
                 case 'joke':
@@ -43,7 +45,7 @@ router.post('/', function(req, res) {
 
                     var jokeMessage = jokes[getRandomIndex(0, jokes.length)];
 
-                    sendMessage(jokeMessage);
+                    sendMessage(jokeMessage, bot_id);
 
                     break;
                 default:
@@ -75,8 +77,8 @@ function getRandomIndex(low, high) {
     return Math.floor(Math.random() * (high - low) + low);
 }
 
-function sendMessage(message){
-    request.post({url:'https://api.groupme.com/v3/bots/post', form: {bot_id:botID, text:message}}, function(err,httpResponse,body){
+function sendMessage(message, bot_id){
+    request.post({url:'https://api.groupme.com/v3/bots/post', form: {bot_id:bot_id, text:message}}, function(err,httpResponse,body){
         console.log("SENT GM MESSAGE: " + message);
     });
 }
