@@ -6,15 +6,14 @@ var botID= "3e535eaec161c3cf9d48d31fc3";
 
 router.post('/', function(req, res) {
     var body = req.body;
-
-    console.log(body);
-
+    
     var body_array = body['text'].split(" ");
 
     var firstWord = body_array[0].toLowerCase();
 
     if(firstWord === 'alejandro'){
         console.log('is alejandro message');
+
 
         if(body_array.length > 1){
 
