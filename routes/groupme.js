@@ -6,7 +6,7 @@ var botID= "3e535eaec161c3cf9d48d31fc3";
 
 router.post('/', function(req, res) {
     var body = req.body;
-    
+
     var body_array = body['text'].split(" ");
 
     var firstWord = body_array[0].toLowerCase();
@@ -20,12 +20,19 @@ router.post('/', function(req, res) {
             var command = body_array[1].toLowerCase();
 
             if(command === 'say'){
-                var string = "";
-                for(var i = 2; i < body_array.length; i++){
-                    string += body_array[i] + " ";
-                }
+                var string = stringAfterCommand(body_array);
 
                 request.post({url:'https://api.groupme.com/v3/bots/post', form: {bot_id:botID, text:string}}, function(err,httpResponse,body){
+                    console.log("SENT GM MESSAGE: " + string);
+                });
+            }else if(command === 'compliment'){
+                var name = stringAfterCommand(body_array);
+
+                var compliments = [' is beautiful', ' is amazing'];
+
+                var message = name + compliments[getRandomIndex(0, compliments.length)];
+
+                request.post({url:'https://api.groupme.com/v3/bots/post', form: {bot_id:botID, text:message}}, function(err,httpResponse,body){
                     console.log("SENT GM MESSAGE: " + string);
                 });
             }
@@ -42,5 +49,18 @@ router.post('/', function(req, res) {
     }
 
 });
+
+function stringAfterCommand(array){
+    var string = "";
+    for(var i = 2; i < array.length; i++){
+        string += array[i] + " ";
+    }
+
+    return string;
+}
+
+function getRandomIndex(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 module.exports = router;
