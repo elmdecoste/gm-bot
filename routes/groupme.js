@@ -16,7 +16,7 @@ router.post('/', function(req, res) {
     if(firstWord === 'alejandro'){
         console.log('is alejandro message');
         request.post({url:'https://api.groupme.com/v3/bots/post', form: {bot_id:botID, text:"You called?"}}, function(err,httpResponse,body){
-            console.log(httpResponse);
+            console.log("SENT GM MESSAGE");
         });
         res.send('{"status":"200"}');
     }else{
