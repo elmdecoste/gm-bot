@@ -19,30 +19,40 @@ router.post('/', function(req, res) {
 
             var command = body_array[1].toLowerCase();
 
-            if(command === 'say'){
-                var message = stringAfterCommand(body_array);
+            switch(command){
+                case 'say':
+                    var sayMessage = stringAfterCommand(body_array);
+                    sendMessage(sayMessage);
+                    break;
+                case 'compliment':
+                    var name = stringAfterCommand(body_array);
 
-                sendMessage(message)
-            }else if(command === 'compliment'){
-                var name = stringAfterCommand(body_array);
+                    if(name === 'me'){
+                        name = 'You';
+                    }
 
-                var compliments = ['is beautiful', 'is amazing', 'is spectacular'];
+                    var compliments = ['is beautiful', 'is amazing', 'is spectacular'];
 
-                var message = name + compliments[getRandomIndex(0, compliments.length)];
+                    var complimentMessage = name + compliments[getRandomIndex(0, compliments.length)];
 
-                sendMessage(message);
-            }else if(command === 'joke'){
-                var jokes = ['Knock Knock, who\'s there. It\'s me, Alejandro'];
+                    sendMessage(complimentMessage);
 
-                var message = jokes[getRandomIndex(0, jokes.length)];
+                    break;
+                case 'joke':
+                    var jokes = ['Knock Knock, who\'s there. It\'s me, Alejandro'];
 
-                sendMessage(message);
+                    var jokeMessage = jokes[getRandomIndex(0, jokes.length)];
+
+                    sendMessage(jokeMessage);
+
+                    break;
+                default:
+                    sendMessage('Hey what\'s up?')
+
             }
 
         }else{
-            request.post({url:'https://api.groupme.com/v3/bots/post', form: {bot_id:botID, text:"You called?"}}, function(err,httpResponse,body){
-                console.log("SENT GM MESSAGE: you called?");
-            });
+            sendMessage('You called?')
         }
 
         res.send('{"status":"200"}');
